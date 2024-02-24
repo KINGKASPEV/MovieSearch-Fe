@@ -25,12 +25,14 @@ const ErrorText = styled.p`
   font-size: 16px;
   margin-bottom: 10px;
 `;
+
 const Button = styled.button`
   padding: 10px;
   background-color: #3498db;
   color: #fff;
   cursor: pointer;
 `;
+
 const HistorySection = styled.div`
   margin-top: 20px;
 
@@ -49,6 +51,7 @@ const HistorySection = styled.div`
     margin-bottom: 5px;
   }
 `;
+const Loading = () => <p>Loading...</p>;
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,38 +59,48 @@ const App = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [error, setError] = useState(null);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchMovies = async (title) => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`/api/Movie/search/${title}`);
       setMovies(response.data);
       setError(null);
+      setIsLoading(false);
       // Add the search term to history
       setSearchHistory((prevHistory) => [...prevHistory, title]);
     } catch (error) {
       console.error('Error searching movies:', error);
       setError('No Movie found.');
+      setIsLoading(false);
     }
   };
 
   const getMovieDetails = async (imdbId) => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`/api/Movie/${imdbId}`);
       setSelectedMovie(response.data);
       setError(null);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error getting movie details:', error);
       setError('An error occurred while getting movie details.');
+      setIsLoading(false);
     }
   };
 
   const getSearchHistory = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get('/api/Movie/history');
       setSearchHistory(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error getting search history:', error);
       setError('An error occurred while getting search history.');
+      setIsLoading(false);
     }
   };
 
@@ -101,15 +114,17 @@ const App = () => {
     <Container>
       <IntroText>Explore Your Favorite Movies</IntroText>
       <SearchBar onSearch={setSearchTerm} />
-      {/* <Button onClick={getSearchHistory}>Fetch Search History</Button> */}
       {error && <ErrorText>{error}</ErrorText>}
-      {movies.length > 0 && <MovieList movies={movies} onMovieClick={getMovieDetails} />}
+      {isLoading && <Loading>Loading...</Loading>}
+      {movies.length > 0 && (
+        <MovieList movies={movies} onMovieClick={(imdbId) => getMovieDetails(imdbId)} />
+      )}
       {selectedMovie && <MovieDetail movie={selectedMovie} />}
-      
       <HistorySection>
+        <Button onClick={getSearchHistory}>Fetch Search History</Button>
         <h2>Search History</h2>
         <ul>
-        {searchHistory.slice(-5).map((item, index) => (
+          {searchHistory.slice(-5).map((item, index) => (
             <li key={index}>{item}</li>
           ))}
         </ul>

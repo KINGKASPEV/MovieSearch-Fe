@@ -14,14 +14,22 @@ const MovieDetails = styled.div`
   flex: 1;
 `;
 
+const Loading = styled.p`
+  font-size: 16px;
+  color: #3498db;
+`;
+
 const MovieDetail = ({ movie }) => {
+  if (!movie) {
+    return <Loading>Loading movie details...</Loading>;
+  }
+
   return (
     <MovieDetailContainer>
-      <MoviePoster src={movie.poster} alt={movie.title} />
+      <MoviePoster src={movie.Poster} alt={movie.Title} />
       <MovieDetails>
-        <h2>{movie.title}</h2>
-        <p>{movie.plot}</p>
-        <p>IMDb Rating: {movie.imdbRating}</p>
+        <h2>{movie.Title}</h2>
+        <p>{movie.Plot}</p>
       </MovieDetails>
     </MovieDetailContainer>
   );

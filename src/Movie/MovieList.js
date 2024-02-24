@@ -18,7 +18,10 @@ const MovieList = ({ movies, onMovieClick }) => {
   return (
     <MovieListContainer>
       {movies.map((movie) => (
-        <MovieCard key={movie.imdbID} onClick={() => onMovieClick(movie.imdbID)}>
+        <MovieCard
+          key={movie.imdbID}
+          onClick={() => onMovieClick(movie.imdbID)}
+        >
           <img src={movie.poster} alt={movie.title} style={{ width: '100%' }} />
           <h3>{movie.title}</h3>
         </MovieCard>

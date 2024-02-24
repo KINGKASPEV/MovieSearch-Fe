@@ -16,6 +16,7 @@ const SearchButton = styled.button`
   background-color: #3498db;
   color: #fff;
   cursor: pointer;
+  width: 25%;
 `;
 
 const ErrorText = styled.p`
