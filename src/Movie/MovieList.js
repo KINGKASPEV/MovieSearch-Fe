@@ -8,16 +8,17 @@ const MovieListContainer = styled.div`
 `;
 
 const MovieCard = styled.div`
+  cursor: pointer;
   border: 1px solid #ddd;
   padding: 10px;
   border-radius: 5px;
 `;
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies, onMovieClick }) => {
   return (
     <MovieListContainer>
       {movies.map((movie) => (
-        <MovieCard key={movie.imdbID}>
+        <MovieCard key={movie.imdbID} onClick={() => onMovieClick(movie.imdbID)}>
           <img src={movie.poster} alt={movie.title} style={{ width: '100%' }} />
           <h3>{movie.title}</h3>
         </MovieCard>

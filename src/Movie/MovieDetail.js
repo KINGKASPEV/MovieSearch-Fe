@@ -1,59 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const DetailContainer = styled.div`
+const MovieDetailContainer = styled.div`
   display: flex;
-  margin-top: 20px;
+  gap: 20px;
 `;
 
-const Poster = styled.img`
-  max-width: 200px;
-  margin-right: 20px;
+const MoviePoster = styled.img`
+  max-width: 300px;
 `;
 
-const Details = styled.div`
+const MovieDetails = styled.div`
   flex: 1;
 `;
 
-const Title = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
-`;
-
-const Description = styled.p`
-  font-size: 16px;
-  margin-bottom: 10px;
-`;
-
-const Ratings = styled.div`
-  margin-bottom: 10px;
-`;
-
-const RatingItem = styled.div`
-  font-size: 14px;
-  margin-bottom: 5px;
-`;
-
 const MovieDetail = ({ movie }) => {
-  const { Title, Poster, Plot, Ratings } = movie;
-
   return (
-    <DetailContainer>
-      <Poster src={Poster} alt={`${Title} Poster`} />
-      <Details>
-        <Title>{Title}</Title>
-        <Description>{Plot}</Description>
-        <Ratings>
-          <h3>Ratings:</h3>
-          {Ratings &&
-            Ratings.map((rating, index) => (
-              <RatingItem key={index}>
-                <strong>{rating.Source}:</strong> {rating.Value}
-              </RatingItem>
-            ))}
-        </Ratings>
-      </Details>
-    </DetailContainer>
+    <MovieDetailContainer>
+      <MoviePoster src={movie.poster} alt={movie.title} />
+      <MovieDetails>
+        <h2>{movie.title}</h2>
+        <p>{movie.plot}</p>
+        <p>IMDb Rating: {movie.imdbRating}</p>
+      </MovieDetails>
+    </MovieDetailContainer>
   );
 };
 

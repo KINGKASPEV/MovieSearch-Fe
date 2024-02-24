@@ -5,7 +5,6 @@ import SearchBar from './Movie/SearchBar';
 import MovieList from './Movie/MovieList';
 import MovieDetail from './Movie/MovieDetail';
 
-// Set the base URL for your backend
 axios.defaults.baseURL = 'https://localhost:7036';
 
 const Container = styled.div`

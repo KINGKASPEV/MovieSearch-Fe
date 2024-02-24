@@ -18,14 +18,32 @@ const SearchButton = styled.button`
   cursor: pointer;
 `;
 
+const ErrorText = styled.p`
+  color: red;
+  margin-top: 5px;
+`;
+
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSearch = () => {
-    onSearch(searchTerm);
+  const handleSearch = async () => {
+    try {
+      if (!searchTerm) {
+        setError('Please enter a search term.');
+        return;
+      }
+
+      await onSearch(searchTerm);
+      setError(''); 
+    } catch (error) {
+      console.error('Error searching movies:', error);
+      setError('An error occurred while searching for movies.');
+    }
   };
 
   return (
+    <div>
     <SearchBarContainer>
       <SearchInput
         type="text"
@@ -35,6 +53,8 @@ const SearchBar = ({ onSearch }) => {
       />
       <SearchButton onClick={handleSearch}>Search</SearchButton>
     </SearchBarContainer>
+    {error && <ErrorText>{error}</ErrorText>}
+    </div>
   );
 };
 
