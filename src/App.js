@@ -25,21 +25,48 @@ const ErrorText = styled.p`
   font-size: 16px;
   margin-bottom: 10px;
 `;
+const Button = styled.button`
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  cursor: pointer;
+`;
+const HistorySection = styled.div`
+  margin-top: 20px;
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+`;
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [error, setError] = useState(null);
+  const [searchHistory, setSearchHistory] = useState([]);
 
   const searchMovies = async (title) => {
     try {
       const response = await axios.get(`/api/Movie/search/${title}`);
       setMovies(response.data);
       setError(null);
+      // Add the search term to history
+      setSearchHistory((prevHistory) => [...prevHistory, title]);
     } catch (error) {
       console.error('Error searching movies:', error);
-      setError('An error occurred while searching for movies.');
+      setError('No Movie found.');
     }
   };
 
@@ -54,6 +81,16 @@ const App = () => {
     }
   };
 
+  const getSearchHistory = async () => {
+    try {
+      const response = await axios.get('/api/Movie/history');
+      setSearchHistory(response.data);
+    } catch (error) {
+      console.error('Error getting search history:', error);
+      setError('An error occurred while getting search history.');
+    }
+  };
+
   useEffect(() => {
     if (searchTerm) {
       searchMovies(searchTerm);
@@ -64,9 +101,19 @@ const App = () => {
     <Container>
       <IntroText>Explore Your Favorite Movies</IntroText>
       <SearchBar onSearch={setSearchTerm} />
+      {/* <Button onClick={getSearchHistory}>Fetch Search History</Button> */}
       {error && <ErrorText>{error}</ErrorText>}
       {movies.length > 0 && <MovieList movies={movies} onMovieClick={getMovieDetails} />}
       {selectedMovie && <MovieDetail movie={selectedMovie} />}
+      
+      <HistorySection>
+        <h2>Search History</h2>
+        <ul>
+        {searchHistory.slice(-5).map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </HistorySection>
     </Container>
   );
 };
