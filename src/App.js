@@ -11,6 +11,13 @@ const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
+`;
+
+const IntroText = styled.h1`
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
 `;
 
 const ErrorText = styled.p`
@@ -55,6 +62,7 @@ const App = () => {
 
   return (
     <Container>
+      <IntroText>Explore Your Favorite Movies</IntroText>
       <SearchBar onSearch={setSearchTerm} />
       {error && <ErrorText>{error}</ErrorText>}
       {movies.length > 0 && <MovieList movies={movies} onMovieClick={getMovieDetails} />}
