@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'; 
 
 const MovieListContainer = styled.div`
   display: grid;
@@ -15,16 +16,18 @@ const MovieCard = styled.div`
 `;
 
 const MovieList = ({ movies, onMovieClick }) => {
+  if (!movies) {
+    return null; 
+  }
   return (
     <MovieListContainer>
       {movies.map((movie) => (
-        <MovieCard
-          key={movie.imdbID}
-          onClick={() => onMovieClick(movie.imdbID)}
-        >
-          <img src={movie.poster} alt={movie.title} style={{ width: '100%' }} />
-          <h3>{movie.title}</h3>
-        </MovieCard>
+        <Link key={movie.imdbID} to={`/movie/${movie.imdbID}`}> {/* Use Link to navigate */}
+          <MovieCard>
+            <img src={movie.poster} alt={movie.title} style={{ width: '100%' }} />
+            <h3>{movie.title}</h3>
+          </MovieCard>
+        </Link>
       ))}
     </MovieListContainer>
   );
